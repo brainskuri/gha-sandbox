@@ -1,0 +1,21 @@
+name: release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create installer
+        shell: bash
+        run: echo ${{ github.ref_name }} > installer_${{ github.ref_name }}.txt
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: installer_*.txt
